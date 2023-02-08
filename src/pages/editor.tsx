@@ -1,6 +1,7 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import { useStateWithStorage } from '../hooks/use_state_with_storage'
+import * as ReactMarkdown from 'react-markdown'
 
 const Header = styled.header`
   font-size: 1.5rem;
@@ -61,7 +62,9 @@ export const Editor: React.FC = () => {
           }}
           value={text}
         />
-        <Preview>プレビューエリア</Preview>
+        <Preview>
+          <ReactMarkdown>{text}</ReactMarkdown>
+        </Preview>
       </Wrapper>
     </>
   )
