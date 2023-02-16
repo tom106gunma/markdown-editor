@@ -44,12 +44,13 @@ const Preview = styled.div`
   top: 0;
   width: 50vw;
 `
+interface Props {
+  text: string
+  setText: (text: string) => void
+}
 
-// 保存時のキー名を設定
-const StorageKey = 'pages/editor:text'
-
-export const Editor: React.FC = () => {
-  const [text, setText ] = useStateWithStorage('', StorageKey)
+export const Editor: React.FC<Props> = (props) => {
+  const { text, setText } = props
 
   const [showModal, setShowModal] = useState(false)
 
