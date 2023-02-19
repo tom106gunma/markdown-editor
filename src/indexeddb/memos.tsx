@@ -7,6 +7,7 @@ export interface MemoRecord {
   text: string
 }
 
+
 // データベース名を指定してインスタンスを生成
 const database = new Dexie('markdown-editor')
 // バージョンと使用するテーブルとインデックスとなるデータ名を指定
@@ -20,8 +21,19 @@ export const putMemo = async (title: string, text: string): Promise<void> => {
   await memos.put({ datetime, title, text})
 }
 
-export const getMemos = (): Promise<MemoRecord[]> => {
+const NUM_PER_PAGE: number = 10
+
+export const getMemoPageCount = async (): Promise<number> => {
+  const totalCount = await memos.count()
+  const pageCount = Math.ceil(totalCount / NUM_PER_PAGE)
+  return pageCount > 0 ? pageCount : 1
+}
+
+export const getMemos = (page: number): Promise<MemoRecord[]> => {
+  const offset = (page -1) * NUM_PER_PAGE
   return memos.orderBy('datetime')
               .reverse()
+              .offset(offset)
+              .limit(NUM_PER_PAGE)
               .toArray()
 }
