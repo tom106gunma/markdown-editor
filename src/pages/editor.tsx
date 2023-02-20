@@ -7,8 +7,10 @@ import { Button } from '../components/button'
 import { SaveModal } from '../components/save_modal'
 import { Link } from 'react-router-dom'
 import { Header } from '../components/header'
+import TestWorker from 'worker-loader!../worker/test'
 
-const { useState } = React
+const testWorker = new TestWorker()
+  const { useState, useEffect } = React
 
 const Wrapper = styled.div`
   bottom: 0;
@@ -53,6 +55,16 @@ export const Editor: React.FC<Props> = (props) => {
   const { text, setText } = props
 
   const [showModal, setShowModal] = useState(false)
+
+  useEffect(() => {
+    testWorker.onmessage = (event) => {
+      console.log('Main thread Received:', event.data)
+    }
+  }, [])
+
+  useEffect(() => {
+    testWorker.postMessage(text)
+  }, [text])
 
   return (
     <>
